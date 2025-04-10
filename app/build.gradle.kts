@@ -54,11 +54,27 @@ dependencies {
 
     //dependency injection
     implementation(libs.hilt.android)
+    implementation(libs.firebase.crashlytics.buildtools)
     kapt(libs.hilt.android.compiler)
 
     //dependencias
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+
+    //dependencia navegabilidad
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
+
+    //depedencia httpClient
+    implementation ("io.ktor:ktor-client-core:2.3.2")
+    implementation ("io.ktor:ktor-client-okhttp:2.3.2")
+    implementation ("io.ktor:ktor-client-content-negotiation:2.3.2")
+    implementation ("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
+
+    //viewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
