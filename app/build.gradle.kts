@@ -52,29 +52,29 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    //dependency injection
+
+    // Dependency Injection
     implementation(libs.hilt.android)
-    implementation(libs.firebase.crashlytics.buildtools)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
-    //dependencias
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    // Async images
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
-    //dependencia navegabilidad
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.content.negotiation)
 
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
-    //depedencia httpClient
-    implementation ("io.ktor:ktor-client-core:2.3.2")
-    implementation ("io.ktor:ktor-client-okhttp:2.3.2")
-    implementation ("io.ktor:ktor-client-content-negotiation:2.3.2")
-    implementation ("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
-
-    //viewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-
-
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -83,4 +83,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+kapt {
+    correctErrorTypes = true
 }

@@ -1,38 +1,45 @@
 package com.example.cryptocapapp.viewModels
-
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.cryptocapapp.models.Asset
 import com.example.cryptocapapp.services.CoinCapApiService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import dagger.hilt.android.lifecycle.HiltViewModel
-
 import javax.inject.Inject
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 
+@HiltViewModel
 class AssetsListViewModel @Inject constructor(
     private val apiService: CoinCapApiService
-):ViewModel() {
+) : ViewModel(){
     private val _assets = MutableStateFlow<List<Asset>>(emptyList())
     val assets: StateFlow<List<Asset>> = _assets
 
-    init {
+    init{
         fetchAssets()
-
     }
-
     private fun fetchAssets(){
         viewModelScope.launch {
             try {
-                val result = apiService.getAssets()
-                _assets.value = result
+                val result = apiService.getAssets().data
+                val mappedAssets = result.map { assetResponse ->
+                    val price = String.format("%2f", assetResponse.priceUsd.toDouble())
+                    val percentage = String.format("%2f", assetResponse.changePercent24Hr.toDouble()).toDouble()
+                    Asset(
+                        assetResponse.id,
+                        assetResponse.name,
+                        assetResponse.symbol,
+                        price,
+                        percentage,
+                    )
+
+                }
+                _assets.value = mappedAssets
             }catch (e: Exception){
-                // Todo:Handle error
+                print(e.message)
             }
+
         }
-
     }
-
 }
