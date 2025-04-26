@@ -1,6 +1,5 @@
 package com.example.cryptocapapp.models
 
-
 data class Asset(
     val id: String,
     val name: String,

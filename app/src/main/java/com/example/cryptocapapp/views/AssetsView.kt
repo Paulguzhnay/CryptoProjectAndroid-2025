@@ -1,17 +1,16 @@
 package com.example.cryptocapapp.views
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
@@ -19,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,44 +30,58 @@ import coil3.compose.AsyncImage
 import com.example.cryptocapapp.models.Asset
 import com.example.cryptocapapp.ui.theme.Typography
 import com.example.cryptocapapp.viewModels.AssetsListViewModel
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
+import com.example.cryptocapapp.navigation.BottomNavigationItem
+
 @Composable
-fun AssetsList(viewModel: AssetsListViewModel = hiltViewModel()) {
+fun AssetsList(viewModel: AssetsListViewModel = hiltViewModel(), navController: NavHostController) {
+
+//    val assets = viewModel.assets.collectAsState()
     val assets by viewModel.assets.collectAsState()
+
+
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.onBackground)
     ) {
-        items(assets, key = { it.id }) { asset ->
-            AssetRow(asset)
+        items(assets, key = { it.id } ) { asset ->
+            AssetRow(asset) { assetId ->
+                navController.navigate("${BottomNavigationItem.Home.route}/${assetId}")
+            }
         }
     }
 }
 
 @Composable
-fun AssetRow(asset: Asset) {
+fun AssetRow(asset: Asset, onClick: (String) -> Unit) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp)
+            .clickable { onClick(asset.id) }
     ) {
         Box(
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
         ) {
             if (LocalInspectionMode.current) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier
+                        .size(30.dp)
                 )
             } else {
                 AsyncImage(
                     model = "https://assets.coincap.io/assets/icons/${asset.symbol.lowercase()}@2x.png",
                     contentDescription = null,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier
+                        .size(30.dp)
                 )
             }
         }
@@ -91,47 +103,25 @@ fun AssetRow(asset: Asset) {
 
         Text(
             text = "${asset.percentage}%",
+            modifier = Modifier.padding(horizontal = 16.dp),
             color = if (asset.percentage >= 0) Color.Green else Color.Red,
-            style = Typography.labelLarge,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            style = Typography.labelLarge
+
         )
 
         Text(
             text = "$${asset.price}",
+            modifier = Modifier.padding(horizontal = 16.dp),
             color = Color.White,
-            style = Typography.labelLarge,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            style = Typography.labelLarge
         )
     }
 }
 
 @Preview(
-    showBackground = true,
-    showSystemUi = true
+    showBackground = true
 )
 @Composable
-fun AssetRowPreview() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        AssetRow(
-            Asset(
-                id = "01",
-                name = "Bitcoin",
-                symbol = "BTC",
-                price = "53800",
-                percentage = 5.89,
-            )
-        )
-        AssetRow(
-            Asset(
-                id = "02",
-                name = "Ethereum",
-                symbol = "ETH",
-                price = "4980",
-                percentage = -7.89,
-            )
-        )
-    }
+fun AssetsListPreview() {
+//    AssetsList()
 }

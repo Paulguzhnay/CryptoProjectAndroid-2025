@@ -1,4 +1,5 @@
 package com.example.cryptocapapp.viewModels
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cryptocapapp.models.Asset
@@ -12,34 +13,40 @@ import javax.inject.Inject
 @HiltViewModel
 class AssetsListViewModel @Inject constructor(
     private val apiService: CoinCapApiService
-) : ViewModel(){
+) : ViewModel() {
+
+    // TODO: add Loading
+
     private val _assets = MutableStateFlow<List<Asset>>(emptyList())
     val assets: StateFlow<List<Asset>> = _assets
 
-    init{
+    // TODO: add error
+
+    init {
         fetchAssets()
     }
-    private fun fetchAssets(){
+
+    private fun fetchAssets() {
         viewModelScope.launch {
             try {
                 val result = apiService.getAssets().data
                 val mappedAssets = result.map { assetResponse ->
-                    val price = String.format("%2f", assetResponse.priceUsd.toDouble())
-                    val percentage = String.format("%2f", assetResponse.changePercent24Hr.toDouble()).toDouble()
+                    val price = String.format("%.2f", assetResponse.priceUsd.toDouble())
+                    val percentage = String.format("%.2f", assetResponse.changePercent24Hr.toDouble()).toDouble()
+
                     Asset(
                         assetResponse.id,
                         assetResponse.name,
                         assetResponse.symbol,
                         price,
-                        percentage,
+                        percentage
                     )
-
                 }
                 _assets.value = mappedAssets
-            }catch (e: Exception){
+            } catch (e: Exception) {
+                // TODO: Handle error
                 print(e.message)
             }
-
         }
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "273914363632",
+    "project_id": "cryptoapp-2025",
+    "storage_bucket": "cryptoapp-2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273914363632:android:dd6670970c5740ab8a4c35",
+        "android_client_info": {
+          "package_name": "com.example.cryptocapapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc3x6GCIlz1Gy8xnGulj8PT74pIL-wwWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
